@@ -56,7 +56,7 @@
       %div.edit-input-wrapper
         = f.label :skills
         = f.text_field :name, data: {autocomplete_source: skill_set(@all_skills)}
-      = f.submit "Add Skill", class: "btn btn-success", id: "edit-submit"
+      = f.submit "Add Skill to Profile", class: "btn btn-success", id: "edit-submit"
   .col-lg-7
     %ul
       - @user.skills.each do |type|

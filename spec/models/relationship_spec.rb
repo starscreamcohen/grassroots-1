@@ -10,6 +10,7 @@ describe Relationship do
       alice = Fabricate(:user, user_group: "nonprofit")
       huggey_bear = Fabricate(:organization)
       bob = Fabricate(:user, user_group: "nonprofit", organization_id: huggey_bear.id)
+      huggey_bear.update_columns(user_id: bob.id)
       alice.follow!(bob)
       first_relationship = Relationship.first
 

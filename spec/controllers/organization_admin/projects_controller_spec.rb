@@ -132,63 +132,6 @@ describe OrganizationAdmin::ProjectsController, :type => :controller do
       expect(NewsfeedItem.from_users_followed_by(bob)).to match_array([item, item2])
     end
 
-    context "when a user adds required skills to a project" do
-      let!(:alice) {Fabricate(:organization_administrator, first_name: "Alice", user_group: "nonprofit")}
-      let!(:huggey_bear) {Fabricate(:organization, user_id: alice.id)}
-      let!(:graphic_design) {Fabricate(:skill, name: "Graphic Design")}
-
-      before(:each) do
-        set_current_user(alice)
-      end
-
-      it "redirects back to the project creation page" do
-        post :create, skill: {name: "Adobe"}, commit: "Add Skill"
-
-        expect(response).to redirect_to(new_organization_admin_project_path(project_id: Project.first.id))
-      end
-
-      it "associates a skill with the project" do
-        post :create, skill: {name: "Graphic Design"}, commit: "Add Skill"
-
-        expect(assigns(:project).skills).to match_array([graphic_design])
-      end
-
-      it "creates a new skill if skill does not exist" do
-        post :create, skill: {name: "Ruby on Rails"}, commit: "Add Skill"
-        
-        expect(Skill.count).to eq(2)
-      end
-
-      it "creates a project" do
-        post :create, skill: {name: "Ruby on Rails"}, commit: "Add Skill"
-        
-        expect(Project.count).to eq(1)
-      end
-
-      it "does not create another project when adding another skill" do
-        project = Project.create(organization_id: alice.administrated_organization.id)
-        project.skills << graphic_design
-        post :create, skill: {name: "Ruby on Rails"}, commit: "Add Skill", project_id: project.id
-        
-        expect(Project.count).to eq(1)
-      end
-
-      it "creates a project draft if it creates a project" do
-        post :create, skill: {name: "Ruby on Rails"}, commit: "Add Skill"
-        
-        project = Project.first
-        expect(project.project_draft).to eq(ProjectDraft.first)
-      end
-
-      it "does not create a project draft if the project has one" do
-        project = Project.create(organization_id: alice.administrated_organization.id)
-        ProjectDraft.create(organization_id: alice.administrated_organization.id, project_id: project.id)
-        post :create, skill: {name: "Ruby on Rails"}, commit: "Add Skill", project_id: project.id
-        
-        expect(ProjectDraft.count).to eq(1)
-      end
-    end
-
     context "when saving a draft of a project" do
       it "creates a project when there is not a created project with skills" do
         post :create, project: Fabricate.attributes_for(:project, title: "WordPress Site", organization_id: huggey_bears.id), commit: "Save Draft"

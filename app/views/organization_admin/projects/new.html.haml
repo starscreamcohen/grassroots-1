@@ -35,12 +35,12 @@
             = f.submit "Publish Project", class: "btn btn-lg btn-primary pull-right"
             = f.submit "Save Draft", class: "btn btn-lg btn-primary"
     
-    = form_for @skill, url: organization_admin_projects_path, method: :post do |f|
+    = form_for @skill do |f|
       %div.edit-input-wrapper
         = f.label :skill_requirements
         = f.text_field :name, data: {autocomplete_source: skill_set(@all_skills)}
         = hidden_field_tag 'project_id', @project.id if @project.id
-      = f.submit "Add Skill", class: "btn btn-success", id: "edit-submit"
+      = f.submit "Add Skill to Project", class: "btn btn-success", id: "edit-submit"
     %ul
       - if !@project.skills.blank?
         - @project.skills.each do |type|
