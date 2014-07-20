@@ -47,26 +47,17 @@ class User < ActiveRecord::Base
 
   def completed_projects  
     contracts_reflecting_completed_work = assignments.where(active: false, complete: true).to_a
-    completed_projects = contracts_reflecting_completed_work.map do |member|
-      Project.find(member.project_id)
-    end
-    completed_projects.sort
+    contracts_reflecting_completed_work.map { |member| Project.find(member.project_id)}.sort
   end
 
   def submitted_work
     contracts_reflecting_work_being_submitted = Contract.where(volunteer_id: self.id, active: true, work_submitted: true).to_a
-    project_in_review = contracts_reflecting_work_being_submitted.map do |member|
-      Project.find(member.project_id)
-    end
-    project_in_review.sort
+    contracts_reflecting_work_being_submitted.map {|member| Project.find(member.project_id)}.sort
   end
 
   def projects_in_production
     contracts_reflecting_work_in_production = Contract.where(volunteer_id: self.id, active: true, work_submitted: false).to_a
-    in_production = contracts_reflecting_work_in_production.map do |member|
-      Project.find(member.project_id)
-    end
-    in_production.sort
+    contracts_reflecting_work_in_production.map {|member| Project.find(member.project_id)}.sort
   end
 
   def organization_name_box
@@ -83,11 +74,7 @@ class User < ActiveRecord::Base
   end
 
   def inbox
-    collection = self.received_messages.select(:conversation_id)
-    all_conversations = collection.map do |member|
-      convo_id = member.conversation_id
-      Conversation.find(convo_id)
-    end  
+    all_conversations = self.conversations
     all_conversations.sort! {|a, b| a.updated_at <=> b.updated_at}
   end
 
@@ -96,9 +83,7 @@ class User < ActiveRecord::Base
   end
 
   def only_conversations_about_work
-    contracts = self.conversations.where(contract_id: true).to_a
-    applications = self.conversations.where(volunteer_application_id: true).to_a
-    contracts + applications
+    self.conversations.where(contract_id: true).to_a + self.conversations.where(volunteer_application_id: true).to_a
   end
 
   def organization_name
@@ -106,9 +91,7 @@ class User < ActiveRecord::Base
   end
 
   def projects_with_open_applications
-    open_applications.map do |member|
-      Project.find(member.project_id)
-    end
+    open_applications.map {|member| Project.find(member.project_id)}
   end
 
   def drop_contract(agreement)
@@ -120,12 +103,9 @@ class User < ActiveRecord::Base
   end
 
   def update_profile_progress
-    profile_completeness = [self.email, self.first_name, self.last_name, 
-      self.contact_reason, self.state_abbreviation, self.city, self.bio, self.position]
+    profile_completeness = [self.email, self.first_name, self.last_name, self.contact_reason, self.state_abbreviation, self.city, self.bio, self.position]
     progress = 0
-    profile_completeness.each do |field|
-      progress += 1 unless field.nil? || field == ""
-    end
+    profile_completeness.each {|field| progress += 1 unless field.nil? || field == ""}
     entirety = progress * 100
     self.profile_progress_status = entirety / profile_completeness.count
   end
@@ -149,5 +129,4 @@ class User < ActiveRecord::Base
     newsfeed_item = NewsfeedItem.create(user_id: self.id)
     relationship.newsfeed_items << newsfeed_item
   end
-
 end

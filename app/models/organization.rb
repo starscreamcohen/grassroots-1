@@ -7,44 +7,31 @@ class Organization < ActiveRecord::Base
   has_attachment :logo, accept: [:jpg, :png, :gif]
 
   def open_projects
-    projects.select do |member|
-      member.state == "open" && member.deadline > Date.today
-    end
+    projects.select {|member| member.state == "open" && member.deadline > Date.today }
   end
 
   def in_production_projects
     active_contracts = organization_administrator.delegated_projects.where(active: true, dropped_out: nil, complete: nil, incomplete: nil, work_submitted: false).to_a
-    projects_in_production = active_contracts.map do |member|
-      Project.find(member.project_id)
-    end
-    projects_in_production.sort
+    projects_in_production = active_contracts.map {|member| Project.find(member.project_id) }.sort
   end
 
   def projects_with_work_submitted
     contracts_reflecting_work_submitted = organization_administrator.delegated_projects.where(active: true, work_submitted: true).to_a
-    contracts_reflecting_work_submitted.map do |member|
-      Project.find(member.project_id)
-    end
+    contracts_reflecting_work_submitted.map {|member| Project.find(member.project_id)}.sort
   end
 
   def completed_projects
     completed_contracts = organization_administrator.delegated_projects.where(active: false, work_submitted: true, complete: true, incomplete: false).to_a
-    completed_contracts.map do |member|
-      Project.find(member.project_id)
-    end
+    completed_contracts.map {|member| Project.find(member.project_id)}.sort
   end
 
   def unfinished_projects
     unfinished_contracts = organization_administrator.delegated_projects.where(incomplete: true).to_a
-    unfinished_contracts.map do |member|
-      Project.find(member.project_id)
-    end
+    unfinished_contracts.map {|member| Project.find(member.project_id) }.sort
   end
 
   def expired_projects
-    projects.select do |member|
-      member.deadline < Date.today
-    end
+    projects.select {|member| member.deadline < Date.today }
   end
 
   def self.search_by_name(search_term)
