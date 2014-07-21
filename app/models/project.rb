@@ -63,4 +63,24 @@ class Project < ActiveRecord::Base
   def is_unfinished?
     self.contracts.where(active: false, incomplete: true).present?
   end
+
+  def project_expired?
+    self.deadline < Date.today
+  end
+
+  def project_notice
+    if self.state == "open"
+      "Project is open"
+    elsif self.in_production?
+      "Project is in production"
+    elsif self.has_submitted_work?
+      "Project has received work"
+    elsif self.is_complete?
+      "Project is complete"
+    elsif self.is_unfinished?
+      "Project is unfinished"
+    else
+      "Project has expired"
+    end
+  end
 end

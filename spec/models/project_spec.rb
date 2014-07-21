@@ -175,4 +175,34 @@ describe Project do
       end
     end
   end
+  describe "#project_notice" do
+    it "should return the state of the project" do
+      word_press_1 = Fabricate(:project, title: "Website", description: "help us make a wordpress site.", state: "open")
+      
+      logo_1 = Fabricate(:project, title: "New Logo", description: "we need help with graphic design work on our site")
+      contract_logo_1 = Fabricate(:contract, active: true, work_submitted: false, project_id: logo_1.id)
+      word_press_2 = Fabricate(:project, title: "A website for nonprofit", description: "we need to revamp our droople site.")
+      contract_word_press_2 = Fabricate(:contract, active: true, work_submitted: true, project_id: word_press_2.id)
+      logo_2 = Fabricate(:project, title: "For a good cause", description: "we need help with graphic design work on our web")
+      contract_logo_2 = Fabricate(:contract, active: false, work_submitted: true, complete: true, project_id: logo_2.id)
+      word_press_3 = Fabricate(:project, title: "another word press site", description: "we need help with a site")
+      contract_word_press_3 = Fabricate(:contract, active: false, incomplete: true, project_id: word_press_3.id)
+      joomla_1 = Fabricate(:project, title: "Joomla", description: "help us make a shitty joomla site.", deadline: 2.days.ago)
+
+      expect(word_press_1.project_notice).to eq("Project is open")
+      expect(logo_1.project_notice).to eq("Project is in production")
+      expect(word_press_2.project_notice).to eq("Project has received work")
+      expect(logo_2.project_notice).to eq("Project is complete")
+      expect(word_press_3.project_notice).to eq("Project is unfinished")
+      expect(joomla_1.project_notice).to eq("Project has expired")
+    end
+  end
+
+  describe "#project_expired?" do
+    it "returns true if today's date is beyond the project's due date and the projects status is open" do
+      word_press_1 = Fabricate(:project, title: "Website", description: "help us make a wordpress site.", deadline: 2.days.ago)
+
+      expect(word_press_1.project_expired?).to eq(true)
+    end
+  end
 end

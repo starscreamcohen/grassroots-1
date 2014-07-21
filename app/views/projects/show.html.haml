@@ -16,24 +16,8 @@
             = link_to "Project Complete", new_message_path(project_id: @project.id), class: "btn btn-primary btn-lg btn-project"  
       .col-lg-4
         - if @project.project_admin || @project.volunteers.first == current_user 
-          - if @project.state == "open"
-            %div.project-notice.open
-              %p.bold.text-alert= "Project is #{@project.state}"
-          - elsif @project.state == "in production"
-            %div.project-notice.open
-              %p.bold.text-alert= "Project is #{@project.state}"
-          - elsif @project.has_submitted_work?
-            %div.project-notice.open
-              %p.bold.text-alert= "Project has received work"
-          - elsif @project.is_complete?
-            %div.project-notice.open
-              %p.bold.text-alert= "Project is completed"
-          - elsif @project.is_unfinished?
-            %div.project-notice.open
-              %p.bold.text-alert= "Project is unfinished"
-          - else
-            %div.project-notice.open
-              %p.bold.text-alert= "Project is expired"
+          .project-notice.open
+            %p.bold.text-alert= "#{@project.project_notice}"
         - else
           - if @project.state == "open"
             %div.project-notice.open

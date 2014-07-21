@@ -85,4 +85,16 @@ module ApplicationHelper
     contractor = User.find(contract.contractor_id)
     current_user == contractor
   end
+
+  def current_user_project_administrator?(project)
+    project.project_admin == current_user
+  end
+
+  def current_user_staff_of_organizations?(project)
+    project.organization == current_user.organization
+  end
+
+  def current_user_a_volunteer?(project)
+    current_user != project.project_admin || current_user.organization != project.organization
+  end
 end

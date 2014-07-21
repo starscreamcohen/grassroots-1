@@ -122,11 +122,8 @@ let(:word_press) {Fabricate(:project, title: "Need WordPress Site", description:
 
   def volunteer_submits_work_for_job_completion(volunteer)
     find(:xpath, "//a[@href='/users/#{volunteer.id}?tab=in+production']").click()
-    
     wait_for_ajax
     click_on("Project Complete")
-    
-    
     fill_in "message[body]", with: "This is done"
     click_on('Create')
     visit user_path(volunteer.id)
