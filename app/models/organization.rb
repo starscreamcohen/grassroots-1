@@ -38,4 +38,22 @@ class Organization < ActiveRecord::Base
     return [] if search_term.blank?
     where("name LIKE ?", "%#{search_term}%")
   end
+
+  def organizations_projects_by_state(clicked_tab)
+    if clicked_tab == "open"
+      self.open_projects
+    elsif clicked_tab == "in production"
+      self.in_production_projects
+    elsif clicked_tab == "pending approval"
+      self.projects_with_work_submitted
+    elsif clicked_tab == "completed"
+      self.completed_projects
+    elsif clicked_tab == "unfinished"
+      self.unfinished_projects
+    elsif clicked_tab == "expired"
+      self.expired_projects
+    else
+      self.project_drafts
+    end
+  end
 end

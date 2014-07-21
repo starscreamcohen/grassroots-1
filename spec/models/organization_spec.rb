@@ -186,4 +186,65 @@ describe Organization do
       expect(Organization.search_by_name("bear")).to eq([huggey_bears, the_bears])
     end
   end
+
+  describe "#organizations_projects_by_state" do
+    before do
+      huggey_bear.update_columns(user_id: alice.id)
+      amnesty.update_columns(user_id: cat.id)
+    end
+
+    let!(:accounting) {Fabricate(:project, title: "didn't do my taxes", user_id: cat.id, organization_id: amnesty.id)}
+    let!(:professional_site) {Fabricate(:project, title: "need a site", user_id: alice.id, organization_id: huggey_bear.id, state: "open")}
+    let!(:professional_logo) {Fabricate(:project, title: "need a logo", user_id: alice.id, organization_id: huggey_bear.id, state: "open")}
+    let!(:business_plan) {Fabricate(:project, title: "need a business plan", user_id: alice.id, organization_id: huggey_bear.id)}
+    let!(:word_press_site) {Fabricate(:project, title: "need a word press site", user_id: alice.id, organization_id: huggey_bear.id)}
+    let!(:logo) {Fabricate(:project, title: "need a snazzy logo", user_id: alice.id, organization_id: huggey_bear.id)}
+    let!(:accounting_2) {Fabricate(:project, title: "need my taxes done", user_id: alice.id, organization_id: huggey_bear.id, deadline: 2.days.ago)}
+
+    let!(:contract1) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: true, project_id: word_press.id)}
+    let!(:contract2) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: false, incomplete: true, project_id: logo.id)}
+    let!(:contract3) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: true, work_submitted: false, project_id: business_plan.id)}
+    let!(:contract4) {Fabricate(:contract, contractor_id: alice.id, active: false, work_submitted: true, complete: true, incomplete: false, project_id: word_press_site.id)}
+
+    it "should return an array of projects that are open" do
+      parameters = {tab: "open"}
+
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([professional_site, professional_logo])
+    end
+
+    it "should return an array of projects that are in production" do
+      parameters = {tab: "in production"}
+      
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([business_plan])
+    end
+
+    it "should return an array of projects that have completion requests" do
+      parameters = {tab: "completed"}
+      
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([word_press_site])
+    end
+
+    it "should return an array of projects that are unfinished" do
+      parameters = {tab: "unfinished"}
+      
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([logo])
+    end
+    it "should return an array of projects that are expired" do
+      parameters = {tab: "expired"}
+
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([accounting_2])
+    end
+
+    it "should return an array of drafts" do
+      parameters = {tab: "drafts"}
+
+      project1 = Fabricate(:project)
+      project2 = Fabricate(:project)
+
+      draft1 = ProjectDraft.create(organization_id: alice.administrated_organization.id, project_id: project1.id)
+      draft2 = ProjectDraft.create(organization_id: alice.administrated_organization.id, project_id: project2.id)
+
+      expect(huggey_bear.organizations_projects_by_state(parameters[:tab])).to eq([draft1, draft2])
+    end
+  end
 end
