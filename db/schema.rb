@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140716154125) do
+ActiveRecord::Schema.define(version: 20140722155414) do
 
   create_table "accomplishments", force: true do |t|
     t.integer  "user_id"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 20140716154125) do
     t.string   "new_password_token"
     t.integer  "profile_progress_status"
     t.string   "small_cover"
+    t.string   "talent_type"
   end
 
   create_table "volunteer_applications", force: true do |t|

@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def project_type_list
-    ["Web Development", "Graphic Design", "Accounting", "Business Consulting",
+    ["Software Development", "Graphic Design", "Accounting", "Fundraising", "Business Consulting",
      "Marketing"].sort
   end
 

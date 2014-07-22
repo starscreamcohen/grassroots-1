@@ -24,6 +24,10 @@
             = "#{@user.city}"
         %h5.header-spacing
           %strong
+            Area of Expertise:
+            = "#{@user.talent_type}"
+        %h5.header-spacing
+          %strong
             Skill set:
             = "#{@user.skills.map(&:name).join(', ')}"
         %btn.pull-right

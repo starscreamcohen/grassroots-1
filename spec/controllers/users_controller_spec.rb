@@ -282,61 +282,60 @@ describe UsersController, :type => :controller do
       contact_email: "test@example.com", goal: "Every year we want at least one thousand human rights activists released from prisons around the world.")}
 
     let!(:alice_smith) {Fabricate(:user, organization_id: 1, first_name: "Alice", 
-      last_name: "Smith", email: "alice@huggey_bear.org", 
+      last_name: "Smith", email: "alice@huggey_bear.org", talent_type: "Graphic Design",
       interests: "animal rights", street1: nil, street2: nil, 
       city: "New York", state_abbreviation: "NY", phone_number: nil, zip: nil, 
       organization_administrator: true, organization_staff: nil, volunteer: nil, 
       position: "Executive Director", user_group: "nonprofit")}
     let!(:bob_adams) {Fabricate(:user, organization_id: 2, first_name: "Bob", 
-      last_name: "Adams", email: "bob@amnesty.org", 
+      last_name: "Adams", email: "bob@amnesty.org", talent_type: "Software Development",
       interests: "human rights", street1: nil, street2: nil, 
       city: "Miami", state_abbreviation: "FL", phone_number: nil, zip: nil, 
       organization_administrator: true, organization_staff: nil, volunteer: nil, 
       position: "Executive Director", user_group: "nonprofit")}
 
     let!(:cat_mckenzie) {Fabricate(:user, organization_id: 1, first_name: "Catherine", 
-      last_name: "McKenzie", email: "cat@huggey_bear.org", 
+      last_name: "McKenzie", email: "cat@huggey_bear.org", talent_type: "Accounting",
       interests: "animal rights", street1: nil, street2: nil, 
       city: "San Francisco", state_abbreviation: "CA", phone_number: nil, zip: nil, 
       organization_staff: true, position: "designer", user_group: "nonprofit")}
     let!(:dan_quale) {Fabricate(:user, organization_id: 1, first_name: "Dan", 
-      last_name: "Quale", email: "dan@amnesty.org", 
+      last_name: "Quale", email: "dan@amnesty.org", talent_type: "Business Consulting",
       interests: "human rights", street1: nil, street2: nil, 
       city: "New York", state_abbreviation: "NY", phone_number: nil, zip: nil, 
       organization_staff: true, position: "developer", user_group: "nonprofit")}
 
     let!(:elena_washington) {Fabricate(:user, first_name: "Elena", last_name: "Washington", 
-      email: "elena@example.org", interests: "urban affairs", 
+      email: "elena@example.org", interests: "urban affairs", talent_type: "Fundraising",
       street1: nil, street2: nil, city: "New York", state_abbreviation: "NY", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
     let!(:frank_daniels) {Fabricate(:user, first_name: "Frank", last_name: "Daniels", 
-      email: "frank@example.org", interests: "environment",
+      email: "frank@example.org", interests: "environment", talent_type: "Graphic Design",
       street1: nil, street2: nil, city: "Birmingham", state_abbreviation: "AL", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
     let!(:george_smith) {Fabricate(:user, first_name: "George", last_name: "Smith", 
-      email: "george@example.org", interests: "human rights",
+      email: "george@example.org", interests: "human rights", talent_type: "Software Development",
       street1: nil, street2: nil, city: "Boston", state_abbreviation: "MA", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
     let!(:harry_ortega) {Fabricate(:user, first_name: "Harry", last_name: "Ortega", 
-      email: "harry@example.org", interests: "animal rights", 
+      email: "harry@example.org", interests: "animal rights", talent_type: "Graphic Design",
       street1: nil, street2: nil, city: "Boston", state_abbreviation: "MA", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
     let!(:isabel_david) {Fabricate(:user, first_name: "Isabel", last_name: "David", 
-      email: "isabel@example.org", interests: "environment", 
+      email: "isabel@example.org", interests: "environment", talent_type: "Software Development",
       street1: nil, street2: nil, city: "New York", state_abbreviation: "NY", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
     let!(:jacob_seltzer) {Fabricate(:user, first_name: "Jacob", last_name: "Seltzer", 
-      email: "jacob@example.org", interests: "urban affairs", 
+      email: "jacob@example.org", interests: "urban affairs", talent_type: "Marketing",
       street1: nil, street2: nil, city: "New York", state_abbreviation: "NY", phone_number: nil, 
       zip: nil, organization_administrator: nil, organization_staff: nil, volunteer: true, 
       user_group: "volunteer", position: nil)}
 
-    let!(:web_development) {Fabricate(:skill, name: "web development")}
 
     context "when only using the checkbox filters" do
       it "redirects to the results page" do
@@ -346,15 +345,9 @@ describe UsersController, :type => :controller do
       end
 
       it "shows only the users within a certain skill set" do
-        bob_adams.skills << web_development
-        isabel_david.skills << web_development
-        dan_quale.skills << web_development
-        jacob_seltzer.skills << web_development
-        george_smith.skills << web_development
+        get :search, talent_type: "Software Development"
 
-        get :search, skills: "web development"
-
-        expect(assigns(:results)).to eq([bob_adams, isabel_david, dan_quale, jacob_seltzer, george_smith])
+        expect(assigns(:results)).to eq([bob_adams, george_smith, isabel_david])
       end
 =begin
       it "shows the users under a certain cause" do

@@ -22,43 +22,43 @@ global_giving = Organization.create(name: "Global Giving", cause: "Social Good",
 User.destroy_all
 
 alice = User.create(organization_id: 1, first_name: "Alice", last_name: "Smith", email: "alice@huggey_bear.org", 
-  street1: nil, street2: nil, small_cover: "profile_photo.png",
+  street1: nil, street2: nil, small_cover: "profile_photo.png", talent_type: "Graphic Design",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: true, 
   organization_staff: nil, volunteer: nil, position: "Executive Director", password: "password", user_group: "nonprofit")
 bob = User.create(organization_id: 2, first_name: "Bob", last_name: "Adams", email: "bob@amnesty.org", 
-  street1: nil, street2: nil, small_cover: "profile_photo.png",
+  street1: nil, street2: nil, small_cover: "profile_photo.png", talent_type: "Software Development",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: true, 
   organization_staff: nil, volunteer: nil, position: "Executive Director", password: "password", user_group: "nonprofit")
 catherine = User.create(organization_id: 3, first_name: "Catherine", last_name: "Hemingway", email: "cat@globalgiving.org", 
-  street1: nil, street2: nil,  small_cover: "profile_photo.png",
+  street1: nil, street2: nil,  small_cover: "profile_photo.png", talent_type: "Fundraising",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: true, 
   organization_staff: nil, volunteer: nil, position: "Executive Director", password: "password", user_group: "nonprofit")
 dan = User.create(organization_id: 1, first_name: "Daniel", last_name: "Montgomey", email: "dan@huggey_bear.org", 
-  street1: nil, street2: nil,  small_cover: "profile_photo.png",
+  street1: nil, street2: nil,  small_cover: "profile_photo.png", talent_type: "Accounting",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "Business Development Executive", password: "password", user_group: "nonprofit")
 elena = User.create(organization_id: 1, first_name: "Elena", last_name: "Lincoln", email: "elena@huggey_bear.org", 
-  street1: nil, street2: nil,  small_cover: "profile_photo.png",
+  street1: nil, street2: nil,  small_cover: "profile_photo.png", talent_type: "Software Development",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "Fundraising Manager", password: "password", user_group: "nonprofit")
 fred = User.create(organization_id: 2, first_name: "Fred", last_name: "Montgomery", email: "fred@amnesty.org", 
-  street1: nil, street2: nil,  small_cover: "profile_photo.png",
+  street1: nil, street2: nil,  small_cover: "profile_photo.png", talent_type: "Graphic Design",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "Junior Associate", password: "password", user_group: "nonprofit")
 genna = User.create(organization_id: 2, first_name: "Genna", last_name: "Kennedy", email: "genna@amnesty.org", 
-  street1: nil, street2: nil,  small_cover: "profile_photo.png",
+  street1: nil, street2: nil,  small_cover: "profile_photo.png", talent_type: "Software Development",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "Event Coordinator", password: "password", user_group: "nonprofit")
 harry = User.create(organization_id: 3, first_name: "Harry", last_name: "Swift", email: "harry@global.org", 
-  street1: nil, street2: nil, small_cover: "profile_photo.png",
+  street1: nil, street2: nil, small_cover: "profile_photo.png", talent_type: "Graphic Design",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "Financial Officer", password: "password", user_group: "nonprofit")
 ingrid = User.create(organization_id: 3, first_name: "Ingrid", last_name: "Washington", email: "ingrid@global.org", 
-  street1: nil, street2: nil, small_cover: "profile_photo.png",
+  street1: nil, street2: nil, small_cover: "profile_photo.png", talent_type: "Marketing",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: true, volunteer: nil, position: "IT", password: "password", user_group: "nonprofit")
 jacob = User.create(first_name: "Jacob", last_name: "Seltzer", email: "jacob@example.org", 
-  street1: nil, street2: nil, small_cover: "profile_photo.png",
+  street1: nil, street2: nil, small_cover: "profile_photo.png", talent_type: "Business Consulting",
   city: "New York", state_id: "NY", phone_number: nil, zip: nil, organization_administrator: nil, 
   organization_staff: nil, volunteer: true, password: "password", user_group: "volunteer")
 

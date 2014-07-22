@@ -73,20 +73,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    #filter = {interests: params[:interests]}  if params[:interests]
-    #filter = {state_abbreviation: params[:state_abbreviation]} if params[:state_abbreviation]
-    #filter = {city: params[:city]} if params[:city]
-    #filter = {position: params[:position]} if params[:position]
-    
-    #if filter != nil
-    #  @results = User.where(filter).to_a
-    #  @results.sort! {|x,y| x.last_name <=> y.last_name }
-    #end 
-
-    if params[:skills]
-      skill = Skill.where(name: params[:skills]).first
-      @results = skill.users
-    end
+    @results = User.where(talent_type: params[:talent_type]) if params[:talent_type]
   end
 
 private
