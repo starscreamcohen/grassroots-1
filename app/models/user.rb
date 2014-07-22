@@ -129,4 +129,16 @@ class User < ActiveRecord::Base
     newsfeed_item = NewsfeedItem.create(user_id: self.id)
     relationship.newsfeed_items << newsfeed_item
   end
+
+  def users_projects_by_state(clicked_tab)
+    if clicked_tab == "open"
+      self.projects_with_open_applications
+    elsif clicked_tab == "in production"
+      self.projects_in_production
+    elsif clicked_tab == "submitted work"
+      self.submitted_work
+    else
+      self.completed_projects
+    end
+  end
 end

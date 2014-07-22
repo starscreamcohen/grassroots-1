@@ -349,6 +349,52 @@ describe User do
         expect(alice.only_conversations_about_work).to_not match_array([convo1, convo2, convo3])
       end
     end
+    describe "#users_projects_by_state" do
+      let!(:alice) {Fabricate(:organization_administrator, first_name: "Alice", user_group: "nonprofit")}
+      let!(:bob) {Fabricate(:user, first_name: "Bob", user_group: "volunteer")}
+
+      before do
+        huggey_bear.update_columns(user_id: alice.id)
+        amnesty.update_columns(user_id: cat.id)
+      end
+
+      let!(:professional_site) {Fabricate(:project, title: "need a site", organization_id: huggey_bear.id, state: "open")}
+      let!(:professional_logo) {Fabricate(:project, title: "need a logo", organization_id: huggey_bear.id, state: "open")}
+      let!(:business_plan) {Fabricate(:project, title: "need a business plan", organization_id: huggey_bear.id)}
+      let!(:word_press_site) {Fabricate(:project, title: "need a word press site", organization_id: huggey_bear.id)}
+      let!(:word_press) {Fabricate(:project, title: "need a word press site now", organization_id: huggey_bear.id)}
+
+      let!(:volunteer_application1) {Fabricate(:volunteer_application, applicant_id: bob.id, administrator_id: alice.id, accepted: nil, rejected: nil, project_id: professional_site.id)}
+      let!(:volunteer_application2) {Fabricate(:volunteer_application, applicant_id: bob.id, administrator_id: alice.id, accepted: nil, rejected: nil, project_id: professional_logo.id)}
+      let!(:contract1) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: true, work_submitted: true, project_id: word_press.id)}
+      let!(:contract3) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: true, work_submitted: false, project_id: business_plan.id)}
+      let!(:contract4) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: false, work_submitted: true, complete: true, incomplete: false, project_id: word_press_site.id)}
+
+      it "should return an array of projects that are open" do
+        parameters = {tab: "open"}
+
+        expect(bob.users_projects_by_state(parameters[:tab])).to eq([professional_site, professional_logo])
+      end
+
+      it "should return an array of projects that are in production" do
+        parameters = {tab: "in production"}
+        
+        expect(bob.users_projects_by_state(parameters[:tab])).to eq([business_plan])
+      end
+
+      it "should return an array of projects that have completion requests" do
+        parameters = {tab: "submitted work"}
+        
+        expect(bob.users_projects_by_state(parameters[:tab])).to eq([word_press])
+      end
+
+      it "should return an array of projects that are unfinished" do
+        parameters = {tab: "completed"}
+        
+        expect(bob.users_projects_by_state(parameters[:tab])).to eq([word_press_site])
+      end
+
+    end
   end
 end
   

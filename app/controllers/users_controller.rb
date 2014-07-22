@@ -6,17 +6,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @applications = @user.projects_with_open_applications
-    @projects_in_production = @user.projects_in_production
-    @submitted_work = @user.submitted_work
-    @completed_projects = @user.completed_projects
-
-    @open_params = params[:tab] == 'open'
-    @production_params = params[:tab] == 'in production'
-    @work_submitted_params = params[:tab] == 'pending approval'
-    @completed_params = params[:tab] == 'completed'
-    @unifinished_params = params[:tab] == 'unfinished'
-    @expired_params = params[:tab] == 'expired'
+    @projects = @user.users_projects_by_state(params[:tab])
 
     @relationships = @user.following_relationships
     @following_relationship = Relationship.where(follower: current_user, leader: @user).first

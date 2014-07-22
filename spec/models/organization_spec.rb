@@ -193,13 +193,13 @@ describe Organization do
       amnesty.update_columns(user_id: cat.id)
     end
 
-    let!(:accounting) {Fabricate(:project, title: "didn't do my taxes", user_id: cat.id, organization_id: amnesty.id)}
-    let!(:professional_site) {Fabricate(:project, title: "need a site", user_id: alice.id, organization_id: huggey_bear.id, state: "open")}
-    let!(:professional_logo) {Fabricate(:project, title: "need a logo", user_id: alice.id, organization_id: huggey_bear.id, state: "open")}
-    let!(:business_plan) {Fabricate(:project, title: "need a business plan", user_id: alice.id, organization_id: huggey_bear.id)}
-    let!(:word_press_site) {Fabricate(:project, title: "need a word press site", user_id: alice.id, organization_id: huggey_bear.id)}
-    let!(:logo) {Fabricate(:project, title: "need a snazzy logo", user_id: alice.id, organization_id: huggey_bear.id)}
-    let!(:accounting_2) {Fabricate(:project, title: "need my taxes done", user_id: alice.id, organization_id: huggey_bear.id, deadline: 2.days.ago)}
+    let!(:accounting) {Fabricate(:project, title: "didn't do my taxes", organization_id: amnesty.id)}
+    let!(:professional_site) {Fabricate(:project, title: "need a site", organization_id: huggey_bear.id, state: "open")}
+    let!(:professional_logo) {Fabricate(:project, title: "need a logo", organization_id: huggey_bear.id, state: "open")}
+    let!(:business_plan) {Fabricate(:project, title: "need a business plan", organization_id: huggey_bear.id)}
+    let!(:word_press_site) {Fabricate(:project, title: "need a word press site", organization_id: huggey_bear.id)}
+    let!(:logo) {Fabricate(:project, title: "need a snazzy logo", organization_id: huggey_bear.id)}
+    let!(:accounting_2) {Fabricate(:project, title: "need my taxes done", organization_id: huggey_bear.id, deadline: 2.days.ago)}
 
     let!(:contract1) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: true, project_id: word_press.id)}
     let!(:contract2) {Fabricate(:contract, contractor_id: alice.id, volunteer_id: bob.id, active: false, incomplete: true, project_id: logo.id)}
