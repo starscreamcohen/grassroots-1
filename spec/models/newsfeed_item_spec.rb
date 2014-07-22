@@ -11,6 +11,7 @@ describe NewsfeedItem do
 
   it "returns an array of newsfeed items for the user from the user's following" do
     Fabricate(:relationship, follower_id: bob.id, leader_id: alice.id )
+
     graphic_design = Fabricate(:project, title: "graphic design", organization_id: huggey_bears.id)
     newsfeed_item = NewsfeedItem.create(user_id: alice.id)
     graphic_design.newsfeed_items << newsfeed_item
@@ -19,7 +20,7 @@ describe NewsfeedItem do
     newsfeed_item2 = NewsfeedItem.create(user_id: alice.id)
     wordpress.newsfeed_items << newsfeed_item2
 
-    expect(NewsfeedItem.from_users_followed_by(bob)).to match_array([newsfeed_item, newsfeed_item2])
+    expect(NewsfeedItem.from_users_followed_by(bob)).to match_array([newsfeed_item2, newsfeed_item])
   end
 
   it "returns an array of newsfeed items from the user's following in the order that they were created" do
@@ -38,7 +39,7 @@ describe NewsfeedItem do
     wordpress.newsfeed_items << newsfeed_item2
 
 
-    expect(NewsfeedItem.from_users_followed_by(bob)).to match_array([newsfeed_item, newsfeed_item2, newsfeed_item3])
+    expect(NewsfeedItem.from_users_followed_by(bob)).to match_array([newsfeed_item2, newsfeed_item, newsfeed_item3])
   end
 
   it "does not include in the array of newsfeed items items that are not part of the users following" do
@@ -63,14 +64,21 @@ describe NewsfeedItem do
     expect(NewsfeedItem.from_users_followed_by(bob).count).to eq(3)
   end
 
-  it "shows the users own newsfeed items" do
+  it "shows the users own newsfeed items too" do
+    Fabricate(:relationship, follower_id: alice.id, leader_id: bob.id)
+
     status_update1 = Fabricate(:status_update, content: "I had a great day today")
-    newsfeed_item = NewsfeedItem.create(user_id: alice.id)
+    newsfeed_item = NewsfeedItem.create(user_id: bob.id)
     status_update1.newsfeed_items << newsfeed_item
 
     accounting = Fabricate(:project, title: "accounting", organization_id: huggey_bears.id, created_at: 5.days.ago)
     newsfeed_item2 = NewsfeedItem.create(user_id: alice.id)
     accounting.newsfeed_items << newsfeed_item2
-    expect(NewsfeedItem.from_users_followed_by(alice)).to eq([newsfeed_item, newsfeed_item2])
+
+    accounting = Fabricate(:project, title: "accounting", organization_id: huggey_bears.id, created_at: 5.days.ago)
+    newsfeed_item3 = NewsfeedItem.create(user_id: alice.id)
+    accounting.newsfeed_items << newsfeed_item3
+
+    expect(NewsfeedItem.from_users_followed_by(alice)).to eq([newsfeed_item3, newsfeed_item2, newsfeed_item])
   end
 end

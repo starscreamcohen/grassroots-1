@@ -4,12 +4,10 @@ class NewsfeedItem < ActiveRecord::Base
   has_many :comments, as: :commentable
 
   def self.from_users_followed_by(a_user)
-    relevent_items = a_user.following_relationships.map do |leader|
-      following = User.find(leader.leader_id)
-      following.newsfeed_items
-    end
+    relevent_items = a_user.following_relationships.map {|leader| User.find(leader.leader_id).newsfeed_items }
     relevent_items << a_user.newsfeed_items
-    relevent_items.flatten
+    relevent_items.flatten!
+    relevent_items.sort_by(&:created_at).reverse
   end
 
   def question_categories
