@@ -5,35 +5,45 @@
         = link_to cl_image_tag(project.organization.logo.path, { size: '150x150', crop: :fit }), project_path(project.id)
       - else
         = link_to image_tag(project.organization.small_cover.to_s, size: "100%"), project_path(project.id)
-    .caption
-    - if project.applicants.count > 0
-      .volunteer-project-requests
-        %span.glyphicon.glyphicon-user.volunteer-glyph
-        .volunteer-plus
-          %span.glyphicon.glyphicon-plus.volunteer-plus-glyph 
-            %span.volunteer-number
-              = "#{project.applicants.count}"
-    %h4.title  
-      = project_title(project)
-    %h5.org-link
-      = link_to project.organization.name, organization_path(project.organization.id)
-    %p.description 
-      - if project.description > project.description.first(60)
-        = "#{project.description.first(60)}..."
-      - else 
-        = project.description
-    .project-thumb-info
-      %dl
-        %dt Skill Set
-        %dd 
-          = project.project_type
-      %dl.deadline
-        %dt Deadline
-        %dd 
-          = fix_date_time(project.deadline)
-    - if current_user_project_administrator?(project)
-      = render "shared/view_project_button", project: project
-    - elsif  current_user_staff_of_organizations?(project)
-      = render "shared/view_project_button", project: project
-    - else 
-      = render "shared/project_update_button", project: project
+      .photo-name-wrapper
+        %h4.title  
+          = project_title(project)
+    %table
+      %tr
+        %td
+          %h5.org-link
+            = link_to project.organization.name, organization_path(project.organization.id)
+        %td
+          - if project.applicants.count > 0
+            %div.volunteer-project-requests
+              %span.glyphicon.glyphicon-user.volunteer-glyph
+              %div.volunteer-plus
+                %span.glyphicon.glyphicon-plus.volunteer-plus-glyph 
+                  %span.volunteer-number
+                    = "#{project.applicants.count}"
+      %tr
+        %td{:colspan => "2"}
+          %p.description 
+            - if project.description > project.description.first(60)
+              = "#{project.description.first(60)}..."
+            - else 
+              = project.description
+      %tr
+        %td
+          %dl
+            %dt Skill Set
+            %dd 
+              = project.project_type
+        %td
+          %dl.deadline
+            %dt Deadline
+            %dd 
+              = fix_date_time(project.deadline)
+      %tr
+        %td{:colspan => "2"}
+          - if current_user_project_administrator?(project)
+            = render "shared/view_project_button", project: project
+          - elsif  current_user_staff_of_organizations?(project)
+            = render "shared/view_project_button", project: project
+          - else 
+            = render "shared/project_update_button", project: project

@@ -17,7 +17,7 @@
             = "#{@organization.cause}"
       %p.pull-right
         = link_to "Edit Organization Profile", edit_organization_admin_organization_path(@organization) if current_user.organization_administrator && current_user.organization_id == @organization.id
-  .col-lg-12
+  .col-lg-12#profile-tabs
     %ul.nav.nav-tabs#myTab
       %li.active
         %a{:href => "#activity", 'data-toggle' => "tab"} Activity
@@ -32,7 +32,7 @@
           %h2 Projects
         .col-lg-6
           %btn
-            = link_to "Create a Project", new_organization_admin_project_path(organization_id: @organization.id), class: "btn btn-primary btn-lg pull-right btn-project" if current_user.organization_administrator
+            = link_to "Create a Project", new_organization_admin_project_path(organization_id: @organization.id), class: "btn btn-primary btn-lg pull-right" if current_user.organization_administrator
 
     .row
       %ul.nav.nav-tabs
